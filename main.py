@@ -1,4 +1,5 @@
 from hojasdevida import *
+from hojasdevida import *
 
 print("----Registro datos personales----")
 name = input("Ingrese su nombre completo: ")

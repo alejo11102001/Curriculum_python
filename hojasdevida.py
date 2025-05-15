@@ -1,0 +1,2 @@
+print("----Registrar datos personales----")
+name = input("Ingrese su nombre completo: ")

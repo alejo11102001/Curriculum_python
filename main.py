@@ -1,29 +1,39 @@
 from hojasdevida import *
 from hojasdevida import *
 
-print("----Registro datos personales----")
-name = input("Ingrese su nombre completo: ")
-id = int(input("Ingrese su documento de identidad: "))
-phone_number = int(input("Ingrese su numero de contacto: "))
-address = input("Ingrese su direccion: ")
-email = input("Ingrese su correo: ")
-birthdate = input("Ingrese su fecha de nacimiento: ")
+def add_curriculum():
+    print("---- Registro de Datos Personales ----")
+    id = input("Ingrese su documento de identidad: ").strip()
+    name = input("Ingrese su nombre completo: ").strip()
+    phone_number = input("Ingrese su número de contacto: ").strip()
+    address = input("Ingrese su dirección: ").strip()
+    email = input("Ingrese su correo: ").strip()
+    birthdate = input("Ingrese su fecha de nacimiento (YYYY-MM-DD): ").strip()
 
-print("----Registro formacion academica----")
-institution = input("Ingrese la institucion a la que asistio: ")
-title = input("Ingrese titulo logrado: ")
-years = int(input("Ingrese años que duro el proceso: "))
+    print("\n---- Registro Formación Académica ----")
+    institution = input("Ingrese la institución a la que asistió: ").strip()
+    title = input("Ingrese título logrado: ").strip()
+    years = int(input("Ingrese los años que duró el proceso: "))
 
-print("----Registro experiencia profesional----")
-company = input("Ingrese el nombre de la empresa: ")
-job_position = input("Ingrese cargo asignado: ")
-functions = input("Ingrese las funciones que realizaba: ")
-duration = int(input("Ingrese en la duracion en años: "))
+    print("\n---- Registro Experiencia Profesional ----")
+    company = input("Ingrese el nombre de la empresa: ").strip()
+    job_position = input("Ingrese cargo asignado: ").strip()
+    functions = input("Ingrese las funciones que realizaba: ").strip()
+    duration = int(input("Ingrese la duración en años: "))
 
-print("----Registro referencias personales----")
-referencs_name = input("Ingrese nombre de la referencia: ")
-relation_referencs = input("Ingrese la relacion con la referencia: ")
-phone_referencs = int(input("Ingrese telefono de la referencia: "))
+    print("\n---- Registro Referencias Personales ----")
+    references_name = input("Ingrese nombre de la referencia: ").strip()
+    relation_references = input("Ingrese la relación con la referencia: ").strip()
+    phone_references = input("Ingrese teléfono de la referencia: ").strip()
 
-print("----Registro habilidades o certificaciones adicionales----")
-certifications = input("Ingrese sus skills o certificado adicionales: ")
+    print("\n---- Registro Habilidades o Certificaciones Adicionales ----")
+    certifications = input("Ingrese sus habilidades o certificados (separados por comas): ").strip()
+
+    add_curriculum_function(
+        id, name, phone_number, address, email, birthdate,
+        institution, title, years,
+        company, job_position, functions, duration,
+        references_name, relation_references, phone_references,
+        certifications)
+add_curriculum()
+print(people)

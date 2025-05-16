@@ -42,5 +42,35 @@ def add_curriculum():
         company, job_position, functions, duration,
         references_name, relation_references, phone_references,
         certifications)
-add_curriculum()
-print(people)
+
+print("Menu")
+
+print("""
+    1. Registrar hoja de vida.
+    2. Consultar hoja de vida.
+    3. Actualizar inforacion registrada.
+    4. Generar reportes.
+    5. SALIR
+    """)
+
+while True:
+    try:
+        opcion = int(input("Ingrese una OPCION: "))
+        if opcion < 1 or opcion > 7:
+            print("\n\033[93mIngrese una OPCION valida (1 - 7)\n\033[0m")
+            continue
+        break
+    except ValueError:
+        print("\n\033[93mValor invaido.\n\033[0m")
+
+match opcion:
+    case 1:
+        main(add_curriculum)
+    case 2:
+        print("hola")
+    case 3:
+        print("hola")
+    case 4:
+        print("hola")
+    case 5:
+        print("👋 Saliste del Sistema... ¡Hasta luego!")

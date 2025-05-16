@@ -1,8 +1,18 @@
 people = {}
 
-
 used_emails = set()
 global_habilities = set()
+
+def main(funcion):
+    funcion()
+    while True:
+        exit_menu = input("\n\033[32m¿Desea continuar o regrear al menu? S(si) - N(no):\033[0m ").lower()
+        if exit_menu == "s":
+            break  
+        elif exit_menu == "n":
+            return 
+        else:
+            print("\033[31mPor favor, ingrese una opción válida (S / N)\033[0m")
 
 def add_curriculum_function(id, name, phone_number, address, email, birthdate, 
                             institution, title, years, 

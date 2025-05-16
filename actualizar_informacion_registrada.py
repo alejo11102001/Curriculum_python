@@ -1,15 +1,16 @@
-from hojasdevida import *
-
 def update_recorded_information(people):
     print("\n--- Actualizar Información Registrada ---")
     doc = input("Ingrese su documento de identidad: ").strip()
-    clue = (doc)
 
-    if clue not in people:
-        print("\033[91mNo se encontró ninguna hoja de vida con esos datos.\033[0m")
+    clave, persona = None, None
+    for k, p in people.items():
+        if k[0] == doc:
+            clave, persona = k, p
+            break
+
+    if persona is None:
+        print("\033[91mNo se encontró ninguna hoja de vida con ese documento.\033[0m")
         return
-
-    persona = people[clue]
 
     print("""
     ¿Qué desea actualizar?
@@ -55,12 +56,12 @@ def update_recorded_information(people):
         persona["datos_personales"]["telefono"] = input("Nuevo teléfono: ")
         persona["datos_personales"]["direccion"] = input("Nueva dirección: ")
         persona["datos_personales"]["correo"] = input("Nuevo correo: ")
-        print(" Datos personales actualizados.")
+        print("Datos personales actualizados.")
 
     elif opcion == 4:
         habilidades = input("Habilidades (separadas por coma): ")
         persona["habilidades_certificaciones"] = [h.strip() for h in habilidades.split(",")]
-        print(" Habilidades actualizadas.")
+        print("Habilidades actualizadas.")
 
     elif opcion == 5:
         nombre = input("Nombre de referencia: ")
@@ -71,7 +72,7 @@ def update_recorded_information(people):
             "relacion": relacion,
             "telefono": telefono
         })
-        print(" Referencia agregada.")
+        print("Referencia agregada.")
 
     else:
         print("Opción no válida.")

@@ -1,11 +1,10 @@
-from main import *
 from hojasdevida import *
 
 def searchCVName():
     name = input("Ingrese el nombre: ")
     name = name.title()
     print(name)
-    if name in people["datos_personales"]:
+    if name in people:
         print("Su nombre esta en la base de datos.")
 
 def searchCVID():
@@ -16,6 +15,8 @@ def searchCVID():
 
 def searchCVEmail():
     email = input("Ingrese el correo electronico: ")
+    if email in people["datos personales"]:
+        print("Su correo se encuentra en la base de datos")
 
 def optionUser():
     print("1. Buscar por nombre")
@@ -40,6 +41,4 @@ def searchMain():
                 print("Regresando al menu principal.")
                 break
             case _:
-                print("La opcion no esta en el menu.")
-            
-searchMain()
+                print("La opcion no esta en el menu")

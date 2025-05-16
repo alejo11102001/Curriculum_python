@@ -6,7 +6,7 @@ global_habilities = set()
 def main(funcion):
     funcion()
     while True:
-        exit_menu = input("\n\033[32m¿Desea continuar o regrear al menu? S(si) - N(no):\033[0m ").lower()
+        exit_menu = input("\n\033[32m¿Desea continuar o regresar al menu? S(si) - N(no):\033[0m ").lower()
         if exit_menu == "s":
             break  
         elif exit_menu == "n":

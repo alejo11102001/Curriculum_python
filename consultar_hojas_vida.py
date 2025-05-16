@@ -2,15 +2,15 @@ from hojasdevida import *
 
 def searchCVName():
     name = input("Ingrese el nombre: ")
-    name = name.title()
+    # name = name.title()
     print(name)
     if name in people:
         print("Su nombre esta en la base de datos.")
 
 def searchCVID():
-    identify = input("Ingrese el numero de identificacion: ")
-    print(identify)
-    if identify in people["datos_personales"]:
+    id = input("Ingrese el numero de identificacion: ")
+    print(id)
+    if id in people:
         print("Su nombre esta en la base de datos.")
 
 def searchCVEmail():

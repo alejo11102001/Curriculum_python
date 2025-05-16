@@ -73,7 +73,10 @@ while True:
                 if not advance_function_add():
                     break
         case 2:
-            print("s")
+            while True:
+                searchMain()
+                if not advance_function_add():
+                    break
         case 3:
             while True:
                 update_recorded_information()

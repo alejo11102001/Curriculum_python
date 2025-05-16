@@ -1,4 +1,5 @@
 from hojasdevida import *
+from consultar_hojas_vida import *
 from actualizar_informacion_registrada import *
 
 def add_curriculum():
@@ -56,8 +57,8 @@ print("""
 while True:
     try:
         opcion = int(input("Ingrese una OPCION: "))
-        if opcion < 1 or opcion > 7:
-            print("\n\033[93mIngrese una OPCION valida (1 - 7)\n\033[0m")
+        if opcion < 1 or opcion > 5:
+            print("\n\033[93mIngrese una OPCION valida (1 - 5)\n\033[0m")
             continue
         break
     except ValueError:
@@ -67,7 +68,7 @@ match opcion:
     case 1:
         main(add_curriculum)
     case 2:
-        print("hola")
+        main(searchMain)
     case 3:
         update_recorded_information(people)
     case 4:

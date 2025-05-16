@@ -15,6 +15,7 @@ def main(funcion):
                 return 
             else:
                 print("\033[31mPor favor, ingrese una opción válida (S / N)\033[0m")
+    funcion()
 
 def add_curriculum_function(id, name, phone_number, address, email, birthdate, 
                             institution, title, years, 

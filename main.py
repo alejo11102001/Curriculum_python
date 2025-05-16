@@ -1,4 +1,5 @@
 from hojasdevida import *
+from actualizar_informacion_registrada import *
 
 def add_curriculum():
     print("---- Registro de Datos Personales ----")
@@ -59,7 +60,7 @@ match opcion:
     case 1:
         main(add_curriculum)
     case 2:
-        print("hola")
+        main(update_recorded_information)
     case 3:
         print("hola")
     case 4:

@@ -1,66 +1,77 @@
-def add_experience():
-    print("\n--- Añadir Experiencia ---")
-    experiencia = input("Ingrese su experiencia laboral (empresa, cargo, tiempo): ")
-    print(f"Experiencia registrada: {experiencia}")
+from hojasdevida import *
 
+def update_recorded_information(people):
+    print("\n--- Actualizar Información Registrada ---")
+    doc = input("Ingrese su documento de identidad: ").strip()
+    clue = (doc)
 
-def add_education():
-    print("\n--- Añadir Formación ---")
-    formacion = input("Ingrese su formación académica (institución, título, año): ")
-    print(f"Formación registrada: {formacion}")
+    if clue not in people:
+        print("\033[91mNo se encontró ninguna hoja de vida con esos datos.\033[0m")
+        return
 
+    persona = people[clue]
 
-def update_personal_info():
-    print("\n--- Actualizar Datos Personales ---")
-    nombre = input("Nuevo nombre completo: ")
-    telefono = input("Nuevo número de teléfono: ")
-    correo = input("Nuevo correo electrónico: ")
-    print(f"Datos personales actualizados:\nNombre: {nombre}\nTeléfono: {telefono}\nCorreo: {correo}")
-
-
-def update_skills():
-    print("\n--- Agregar o Cambiar Habilidades ---")
-    habilidades = input("Ingrese sus habilidades separadas por coma (ej: Python, Trabajo en equipo): ")
-    lista_habilidades = [h.strip() for h in habilidades.split(',')]
-    print("Habilidades registradas:")
-    for habilidad in lista_habilidades:
-        print(f"- {habilidad}")
-
-
-def update_references():
-    print("\n--- Agregar o Cambiar Referencias ---")
-    referencia = input("Ingrese el nombre y contacto de su referencia: ")
-    print(f"Referencia registrada: {referencia}")
-
-
-def update_recorded_information():
-    print("\n------ Actualizar información registrada ------\n")
     print("""
+    ¿Qué desea actualizar?
     1. Añadir Experiencia
     2. Añadir Formación
     3. Actualizar Datos Personales
-    4. Agregar o Cambiar Habilidades
-    5. Agregar o Cambiar Referencias
+    4. Cambiar Habilidades
+    5. Añadir Referencia
     """)
 
-while True:
-        try:
-            opcion = int(input("Ingrese una OPCIÓN: "))
-            if opcion < 1 or opcion > 5:
-                print("\n\033[93mIngrese una OPCIÓN válida (1 - 5)\n\033[0m")
-                continue
-            break
-        except ValueError:
-            print("\n\033[93mValor inválido. Ingrese un número.\n\033[0m")
+    try:
+        opcion = int(input("Ingrese una opción (1-5): "))
+    except ValueError:
+        print("Opción inválida.")
+        return
 
-match opcion:
-    case 1:
-        add_experience()
-    case 2:
-        add_education()
-    case 3:
-        update_personal_info()
-    case 4:
-        update_skills()
-    case 5:
-        update_references()
+    if opcion == 1:
+        empresa = input("Empresa: ")
+        cargo = input("Cargo: ")
+        funciones = input("Funciones: ")
+        duracion = input("Duración: ")
+        persona["experiencia_profesional"].append({
+            "empresa": empresa,
+            "cargo": cargo,
+            "funciones": funciones,
+            "duracion": duracion
+        })
+        print("Experiencia agregada.")
+
+    elif opcion == 2:
+        institucion = input("Institución: ")
+        titulo = input("Título: ")
+        años = input("Años: ")
+        persona["formacion_academica"].append({
+            "institucion": institucion,
+            "titulo": titulo,
+            "años": años
+        })
+        print("Formación agregada.")
+
+    elif opcion == 3:
+        persona["datos_personales"]["nombre_completo"] = input("Nuevo nombre: ")
+        persona["datos_personales"]["telefono"] = input("Nuevo teléfono: ")
+        persona["datos_personales"]["direccion"] = input("Nueva dirección: ")
+        persona["datos_personales"]["correo"] = input("Nuevo correo: ")
+        print(" Datos personales actualizados.")
+
+    elif opcion == 4:
+        habilidades = input("Habilidades (separadas por coma): ")
+        persona["habilidades_certificaciones"] = [h.strip() for h in habilidades.split(",")]
+        print(" Habilidades actualizadas.")
+
+    elif opcion == 5:
+        nombre = input("Nombre de referencia: ")
+        relacion = input("Relación: ")
+        telefono = input("Teléfono: ")
+        persona["referencias"].append({
+            "nombre": nombre,
+            "relacion": relacion,
+            "telefono": telefono
+        })
+        print(" Referencia agregada.")
+
+    else:
+        print("Opción no válida.")

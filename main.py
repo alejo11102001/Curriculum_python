@@ -44,12 +44,11 @@ def add_curriculum():
         references_name, relation_references, phone_references,
         certifications)
 
-print("Menu")
-
 print("""
+    --------- Menu ----------
     1. Registrar hoja de vida.
     2. Consultar hoja de vida.
-    3. Actualizar inforacion registrada.
+    3. Actualizar informacion registrada.
     4. Generar reportes.
     5. SALIR
     """)
@@ -68,9 +67,9 @@ match opcion:
     case 1:
         main(add_curriculum)
     case 2:
-        main(update_recorded_information)
-    case 3:
         print("hola")
+    case 3:
+        update_recorded_information(people)
     case 4:
         print("hola")
     case 5:

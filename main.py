@@ -10,6 +10,11 @@ def add_curriculum():
     email = input("Ingrese su correo: ").strip()
     birthdate = input("Ingrese su fecha de nacimiento (YYYY-MM-DD): ").strip()
 
+    if email in used_emails:
+        print("\033[91mEste correo ya está registrado.\033[0m")
+        return
+    used_emails.add(email)
+
     print("\n---- Registro Formación Académica ----")
     institution = input("Ingrese la institución a la que asistió: ").strip()
     title = input("Ingrese título logrado: ").strip()
@@ -28,6 +33,9 @@ def add_curriculum():
 
     print("\n---- Registro Habilidades o Certificaciones Adicionales ----")
     certifications = input("Ingrese sus habilidades o certificados (separados por comas): ").strip()
+
+    for h in certifications.split(","):
+        global_habilities.add(h.strip())
 
     add_curriculum_function(
         id, name, phone_number, address, email, birthdate,

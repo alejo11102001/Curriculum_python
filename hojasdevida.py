@@ -1,5 +1,8 @@
 people = {}
 
+used_emails = set()
+global_habilities = set()
+
 def main(funcion):
     funcion()
     while True:
@@ -16,7 +19,9 @@ def add_curriculum_function(id, name, phone_number, address, email, birthdate,
                             company, job_position, functions, duration, 
                             references_name, relation_references, phone_references, 
                             certifications):
-    people[id] = {
+    clue = (id, birthdate)
+
+    sheet = {
         "datos_personales": {
             "nombre_completo": name,
             "telefono": phone_number,
@@ -48,4 +53,5 @@ def add_curriculum_function(id, name, phone_number, address, email, birthdate,
         ],
         "habilidades_certificaciones": [skill.strip() for skill in certifications.split(",")]
     }
+    people[clue] = sheet
     print(f"\033[92m\nLa hoja de vida de '{name}' fue agregada correctamente.\033[0m")

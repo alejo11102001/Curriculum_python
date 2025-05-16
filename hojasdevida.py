@@ -1,21 +1,39 @@
 people = {}
 
-
 used_emails = set()
 global_habilities = set()
 
-def main(funcion):
+def return_to_menu_or_exit():
     while True:
-        funcion()
-        while True:
-            exit_menu = input("\n\033[32m¿Desea continuar o regrear al menu? S(si) - N(no):\033[0m ").lower()
-            if exit_menu == "s":
-                break  
-            elif exit_menu == "n":
-                return 
-            else:
-                print("\033[31mPor favor, ingrese una opción válida (S / N)\033[0m")
-    funcion()
+        option_out = input("\033[93m\n¿Deseas volver al menú inicial?: S()si N()no:\033[0m")
+        if option_out == "s":
+            return False 
+        elif option_out == "n":
+            print("\033[93m\nSaliendo del sistema...\033[0m")
+            exit()
+        else:
+            print("\033[91m\nPor favor ingresa 'N' para no o 'S' para sí.\033[0m")
+
+def advance_function_update():
+    while True:
+        output_menu = input("\033[93m\n¿Deseas continuar actualizando hojas de vida?: S()si N()no:\033[0m")
+        if output_menu == "n":
+            return return_to_menu_or_exit() 
+        elif output_menu == "s":
+            return True 
+        else:
+            print("\033[91m\nPor favor ingresa 'N' para no o 'S' para sí.\033[0m")
+
+def advance_function_add():
+    while True:
+        output_menu = input("\033[93m\n¿Deseas continuar ingresando hojas de vida?: S()si N()no:\033[0m")
+        if output_menu == "n":
+            return return_to_menu_or_exit() 
+        elif output_menu == "s":
+            return True 
+        else:
+            print("\033[91m\nPor favor ingresa 'N' para no o 'S' para sí.\033[0m")
+
 
 def add_curriculum_function(id, name, phone_number, address, email, birthdate, 
                             institution, title, years, 

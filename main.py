@@ -45,33 +45,41 @@ def add_curriculum():
         references_name, relation_references, phone_references,
         certifications)
 
-print("""
-    --------- Menu ----------
-    1. Registrar hoja de vida.
-    2. Consultar hoja de vida.
-    3. Actualizar informacion registrada.
-    4. Generar reportes.
-    5. SALIR
-    """)
-
 while True:
-    try:
-        opcion = int(input("Ingrese una OPCION: "))
-        if opcion < 1 or opcion > 5:
-            print("\n\033[93mIngrese una OPCION valida (1 - 5)\n\033[0m")
-            continue
-        break
-    except ValueError:
-        print("\n\033[93mValor invaido.\n\033[0m")
 
-match opcion:
-    case 1:
-        main(add_curriculum)
-    case 2:
-        main(searchMain)
-    case 3:
-        update_recorded_information(people)
-    case 4:
-        print("hola")
-    case 5:
-        print("👋 Saliste del Sistema... ¡Hasta luego!")
+    print("""
+        --------- Menu ----------
+        1. Registrar hoja de vida.
+        2. Consultar hoja de vida.
+        3. Actualizar informacion registrada.
+        4. Generar reportes.
+        5. SALIR
+        """)
+
+    while True:
+        try:
+            opcion = int(input("Ingrese una OPCION: "))
+            if opcion < 1 or opcion > 5:
+                print("\n\033[93mIngrese una OPCION valida (1 - 5)\n\033[0m")
+                continue
+            break
+        except ValueError:
+            print("\n\033[93mValor invaido.\n\033[0m")
+
+    match opcion:
+        case 1:
+            while True:
+                add_curriculum()
+                if not advance_function_add():
+                    break
+        case 2:
+            print("s")
+        case 3:
+            while True:
+                update_recorded_information()
+                if not advance_function_update():
+                    break
+        case 4:
+            print("hola")
+        case 5:
+            print("👋 Saliste del Sistema... ¡Hasta luego!")

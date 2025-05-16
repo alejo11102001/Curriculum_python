@@ -1,78 +1,110 @@
-people = {}
+# Módulo de gestión de hojas de vida
 
-used_emails = set()
-global_habilities = set()
+import json
+import os
+from datetime import datetime
 
-def return_to_menu_or_exit():
+RUTA = "datos.json"
+
+# Función para cargar los datos desde el archivo JSON
+def cargar_datos():
+    if not os.path.exists(RUTA):
+        return []
+    with open(RUTA, "r") as f:
+        return json.load(f)
+
+# Función para guardar los datos al archivo JSON
+def guardar_datos(datos):
+    with open(RUTA, "w") as f:
+        json.dump(datos, f, indent=4)
+
+# Función para registrar una nueva hoja de vida
+def registrar_hoja_de_vida():
+    datos = cargar_datos()
+    nueva = {}
+
+    print("\n--- Registro de Hoja de Vida ---")
+    nueva["nombre"] = input("Nombre completo: ")
+    nueva["documento"] = input("Documento: ")
+    nueva["contacto"] = input("Número de contacto: ")
+    nueva["direccion"] = input("Dirección: ")
+    nueva["correo"] = input("Correo electrónico: ")
+    nueva["fecha_nacimiento"] = input("Fecha de nacimiento (AAAA-MM-DD): ")
+
+    nueva["formacion"] = []
     while True:
-        option_out = input("\033[93m\n¿Deseas volver al menú inicial?: S()si N()no:\033[0m")
-        if option_out == "s":
-            return False 
-        elif option_out == "n":
-            print("\033[93m\nSaliendo del sistema...\033[0m")
-            exit()
-        else:
-            print("\033[91m\nPor favor ingresa 'N' para no o 'S' para sí.\033[0m")
+        print("Agregar formación académica:")
+        formacion = {
+            "institucion": input("  Institución: "),
+            "titulo": input("  Título: "),
+            "años": input("  Años: ")
+        }
+        nueva["formacion"].append(formacion)
+        if input("¿Agregar otra formación? (s/n): ").lower() != "s":
+            break
 
-def advance_function_update():
+    nueva["experiencia"] = []
     while True:
-        output_menu = input("\033[93m\n¿Deseas continuar actualizando hojas de vida?: S()si N()no:\033[0m")
-        if output_menu == "n":
-            return return_to_menu_or_exit() 
-        elif output_menu == "s":
-            return True 
-        else:
-            print("\033[91m\nPor favor ingresa 'N' para no o 'S' para sí.\033[0m")
+        print("Agregar experiencia profesional:")
+        exp = {
+            "empresa": input("  Empresa: "),
+            "cargo": input("  Cargo: "),
+            "funciones": input("  Funciones: "),
+            "duracion": input("  Duración: ")
+        }
+        nueva["experiencia"].append(exp)
+        if input("¿Agregar otra experiencia? (s/n): ").lower() != "s":
+            break
 
-def advance_function_add():
+    nueva["referencias"] = []
     while True:
-        output_menu = input("\033[93m\n¿Deseas continuar ingresando hojas de vida?: S()si N()no:\033[0m")
-        if output_menu == "n":
-            return return_to_menu_or_exit() 
-        elif output_menu == "s":
-            return True 
-        else:
-            print("\033[91m\nPor favor ingresa 'N' para no o 'S' para sí.\033[0m")
+        print("Agregar referencia:")
+        ref = {
+            "nombre": input("  Nombre: "),
+            "relacion": input("  Relación: "),
+            "telefono": input("  Teléfono: ")
+        }
+        nueva["referencias"].append(ref)
+        if input("¿Agregar otra referencia? (s/n): ").lower() != "s":
+            break
 
+    habilidades = input("Ingrese habilidades separadas por coma: ")
+    nueva["habilidades"] = [h.strip() for h in habilidades.split(",")]
 
-def add_curriculum_function(id, name, phone_number, address, email, birthdate, 
-                            institution, title, years, 
-                            company, job_position, functions, duration, 
-                            references_name, relation_references, phone_references, 
-                            certifications):
-    clue = (id, birthdate)
+    datos.append(nueva)
+    guardar_datos(datos)
+    print("Hoja de vida registrada correctamente.")
 
-    sheet = {
-        "datos_personales": {
-            "nombre_completo": name,
-            "telefono": phone_number,
-            "direccion": address,
-            "correo": email,
-            "fecha_nacimiento": birthdate
-        },
-        "formacion_academica": [
-            {
-                "institucion": institution,
-                "titulo": title,
-                "años": years
-            }
-        ],
-        "experiencia_profesional": [
-            {
-                "empresa": company,
-                "cargo": job_position,
-                "funciones": functions,
-                "duracion": duration
-            }
-        ],
-        "referencias": [
-            {
-                "nombre": references_name,
-                "relacion": relation_references,
-                "telefono": phone_references
-            }
-        ],
-        "habilidades_certificaciones": [skill.strip() for skill in certifications.split(",")]
-    }
-    people[clue] = sheet
-    print(f"\033[92m\nLa hoja de vida de '{name}' fue agregada correctamente.\033[0m")
+# Función para buscar una hoja de vida
+def buscar_hoja_de_vida():
+    datos = cargar_datos()
+    criterio = input("Buscar por nombre, documento o correo: ").lower()
+    encontrados = []
+
+    for d in datos:
+        if criterio in d["nombre"].lower() or criterio in d["documento"] or criterio in d["correo"].lower():
+            encontrados.append(d)
+
+    if encontrados:
+        for e in encontrados:
+            print(json.dumps(e, indent=4))
+    else:
+        print("No se encontraron resultados.")
+
+# Función para actualizar una hoja de vida
+def actualizar_hoja_de_vida():
+    datos = cargar_datos()
+    documento = input("Ingrese el documento de la persona a actualizar: ")
+
+    for d in datos:
+        if d["documento"] == documento:
+            print("Datos actuales:")
+            print(json.dumps(d, indent=4))
+            d["contacto"] = input("Nuevo contacto: ")
+            d["direccion"] = input("Nueva dirección: ")
+            d["correo"] = input("Nuevo correo: ")
+            guardar_datos(datos)
+            print("Información actualizada correctamente.")
+            return
+
+    print("No se encontró hoja de vida con ese documento.")

@@ -75,3 +75,7 @@ pip install tabulate
 
     Python, SQL, Trabajo en equipo
 
+## Link y captura de pantalla del tablero de trabajo
+https://trello.com/invite/b/6827d8a30f2b6c23da4a7069/ATTI86156e00fe3b753f0bd03908ed15b10d61282AF8/vitaeconsole
+
+![image](https://github.com/user-attachments/assets/685b1418-66e8-4312-af82-bf0b65bafc3b)

@@ -24,11 +24,9 @@
 3. Abre una terminal en el directorio del proyecto.
 4. Instala la dependencia con el siguiente comando:
 
-```bash
 
 pip install tabulate
 
-python main.py
 
 ## Liberias
     - json (incluida en Python)

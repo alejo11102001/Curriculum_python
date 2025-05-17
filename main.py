@@ -2,7 +2,7 @@
 
 # Importamos los módulos necesarios
 from hojasdevida import registrar_hoja_de_vida, buscar_hoja_de_vida, actualizar_hoja_de_vida
-from reportes import generar_reporte, exportar_datos
+from reportes import generar_reporte, exportar_datos, reporte_por_formacion
 import os
 
 def menu():
@@ -12,8 +12,9 @@ def menu():
         print("2. Buscar hoja de vida")
         print("3. Actualizar hoja de vida")
         print("4. Generar reporte")
-        print("5. Exportar datos")
-        print("6. Salir")
+        print("5. Reporte por formación")
+        print("6. Exportar datos")
+        print("7. Salir")
 
         opcion = input("Seleccione una opción: ")
 
@@ -26,8 +27,10 @@ def menu():
         elif opcion == "4":
             generar_reporte()
         elif opcion == "5":
-            exportar_datos()
+            reporte_por_formacion()
         elif opcion == "6":
+            exportar_datos()
+        elif opcion == "7":
             print("Saliendo del sistema...")
             break
         else:

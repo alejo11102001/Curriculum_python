@@ -3,7 +3,6 @@
 import json
 import os
 import csv
-from collections import Counter
 from tabulate import tabulate
 
 RUTA = "datos.json"
@@ -42,3 +41,33 @@ def exportar_datos():
             experiencia = ", ".join([e["duracion"] for e in d["experiencia"]])
             writer.writerow([d["nombre"], d["documento"], d["correo"], experiencia])
     print("Datos exportados a exportado.csv correctamente.")
+
+def reporte_por_formacion():
+    datos = cargar_datos()
+    if not datos:
+        print("No hay datos disponibles.")
+        return
+
+    criterio = input("Ingrese la certificación o formación que desea buscar: ").lower()
+    encontrados = []
+
+    for d in datos:
+        formaciones = d.get("formacion", [])
+        for f in formaciones:
+            titulo = f.get("titulo", "").lower()
+            if criterio in titulo:
+                institucion = f.get("institucion", "No especificada")
+                encontrados.append([
+                    d["nombre"],
+                    d["documento"],
+                    institucion,
+                    f["titulo"]
+                ])
+                break  # Ya lo agregamos, no es necesario seguir revisando más formaciones
+
+    if encontrados:
+        print("\n--- Candidatos con formación relacionada con:", criterio, "---")
+        print(tabulate(encontrados, headers=["Nombre", "Documento", "Institución", "Título"]))
+    else:
+        print("No se encontraron candidatos con esa formación.")
+

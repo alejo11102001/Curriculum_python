@@ -2,9 +2,9 @@
 
 ## Integrantes del Equipo
 
-    - Jerónimo Cardona Restrepo  
-    - [Nombre Integrante 2]  
-    - [Nombre Integrante 3]  
+    - Jerónimo Cardona Restrepo - Van Rossum
+    - Tomas Loiza - Ritchie
+    - Diego Zuluaga - Van Rossum
 
 **Grupo:** Equipo Pitón 🐍
 

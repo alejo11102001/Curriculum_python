@@ -1,0 +1,36 @@
+[
+    {
+        "nombre": "diego",
+        "documento": "1000",
+        "contacto": "322",
+        "direccion": "calle 45",
+        "correo": "zuluaga@gmail.com",
+        "fecha_nacimiento": "2001-10-11",
+        "formacion": [
+            {
+                "institucion": "luis amigo",
+                "titulo": "ingeniero de sistemas",
+                "a\u00f1os": "5"
+            }
+        ],
+        "experiencia": [
+            {
+                "empresa": "bancolombia",
+                "cargo": "practicante",
+                "funciones": "qa",
+                "duracion": "6 meses"
+            }
+        ],
+        "referencias": [
+            {
+                "nombre": "tomas",
+                "relacion": "amigo",
+                "telefono": "320555"
+            }
+        ],
+        "habilidades": [
+            "php",
+            "python"
+        ]
+    }
+]

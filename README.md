@@ -74,3 +74,4 @@ python main.py
     - Ingrese habilidades separadas por coma: 
 
     Python, SQL, Trabajo en equipo
+

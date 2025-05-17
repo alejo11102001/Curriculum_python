@@ -2,42 +2,77 @@
 
 import json
 import os
+import re
 from datetime import datetime
 
 RUTA = "datos.json"
 
-# Función para cargar los datos desde el archivo JSON
 def cargar_datos():
     if not os.path.exists(RUTA):
         return []
     with open(RUTA, "r") as f:
         return json.load(f)
 
-# Función para guardar los datos al archivo JSON
 def guardar_datos(datos):
     with open(RUTA, "w") as f:
         json.dump(datos, f, indent=4)
 
-# Función para registrar una nueva hoja de vida
+def input_no_vacio(mensaje):
+    dato = input(mensaje).strip()
+    while not dato:
+        print("Este campo no puede estar vacío.")
+        dato = input(mensaje).strip()
+    return dato
+
+def input_documento(mensaje):
+    doc = input(mensaje).strip()
+    while not doc.isdigit() or len(doc) < 5:
+        print("Documento inválido. Debe contener solo números y tener al menos 5 dígitos.")
+        doc = input(mensaje).strip()
+    return doc
+
+def input_correo(mensaje):
+    correo = input(mensaje).strip()
+    while not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+        print("Correo electrónico inválido.")
+        correo = input(mensaje).strip()
+    return correo
+
+def input_fecha(mensaje):
+    while True:
+        fecha = input(mensaje).strip()
+        try:
+            datetime.strptime(fecha, "%Y-%m-%d")
+            return fecha
+        except ValueError:
+            print("Formato de fecha inválido. Usa AAAA-MM-DD.")
+
+def input_telefono(mensaje):
+    tel = input(mensaje).strip()
+    while not tel.isdigit() or len(tel) < 7:
+        print("Teléfono inválido. Debe contener solo números y tener al menos 7 dígitos.")
+        tel = input(mensaje).strip()
+    return tel
+
 def registrar_hoja_de_vida():
     datos = cargar_datos()
     nueva = {}
 
     print("\n--- Registro de Hoja de Vida ---")
-    nueva["nombre"] = input("Nombre completo: ")
-    nueva["documento"] = input("Documento: ")
-    nueva["contacto"] = input("Número de contacto: ")
-    nueva["direccion"] = input("Dirección: ")
-    nueva["correo"] = input("Correo electrónico: ")
-    nueva["fecha_nacimiento"] = input("Fecha de nacimiento (AAAA-MM-DD): ")
+    nueva["nombre"] = input_no_vacio("Nombre completo: ")
+    nueva["documento"] = input_documento("Documento: ")
+    nueva["contacto"] = input_telefono("Número de contacto: ")
+    nueva["direccion"] = input_no_vacio("Dirección: ")
+    nueva["correo"] = input_correo("Correo electrónico: ")
+    nueva["fecha_nacimiento"] = input_fecha("Fecha de nacimiento (AAAA-MM-DD): ")
 
     nueva["formacion"] = []
     while True:
         print("Agregar formación académica:")
         formacion = {
-            "institucion": input("  Institución: "),
-            "titulo": input("  Título: "),
-            "años": input("  Años: ")
+            "institucion": input_no_vacio("  Institución: "),
+            "titulo": input_no_vacio("  Título: "),
+            "años": input_no_vacio("  Años: ")
         }
         nueva["formacion"].append(formacion)
         if input("¿Agregar otra formación? (s/n): ").lower() != "s":
@@ -47,10 +82,10 @@ def registrar_hoja_de_vida():
     while True:
         print("Agregar experiencia profesional:")
         exp = {
-            "empresa": input("  Empresa: "),
-            "cargo": input("  Cargo: "),
-            "funciones": input("  Funciones: "),
-            "duracion": input("  Duración: ")
+            "empresa": input_no_vacio("  Empresa: "),
+            "cargo": input_no_vacio("  Cargo: "),
+            "funciones": input_no_vacio("  Funciones: "),
+            "duracion": input_no_vacio("  Duración: ")
         }
         nueva["experiencia"].append(exp)
         if input("¿Agregar otra experiencia? (s/n): ").lower() != "s":
@@ -60,22 +95,21 @@ def registrar_hoja_de_vida():
     while True:
         print("Agregar referencia:")
         ref = {
-            "nombre": input("  Nombre: "),
-            "relacion": input("  Relación: "),
-            "telefono": input("  Teléfono: ")
+            "nombre": input_no_vacio("  Nombre: "),
+            "relacion": input_no_vacio("  Relación: "),
+            "telefono": input_telefono("  Teléfono: ")
         }
         nueva["referencias"].append(ref)
         if input("¿Agregar otra referencia? (s/n): ").lower() != "s":
             break
 
-    habilidades = input("Ingrese habilidades separadas por coma: ")
-    nueva["habilidades"] = [h.strip() for h in habilidades.split(",")]
+    habilidades = input("Ingrese habilidades separadas por coma: ").strip()
+    nueva["habilidades"] = [h.strip() for h in habilidades.split(",") if h.strip()]
 
     datos.append(nueva)
     guardar_datos(datos)
-    print("Hoja de vida registrada correctamente.")
+    print("✅ Hoja de vida registrada correctamente.")
 
-# Función para buscar una hoja de vida
 def buscar_hoja_de_vida():
     datos = cargar_datos()
     criterio = input("Buscar por nombre, documento o correo: ").lower()
@@ -87,24 +121,23 @@ def buscar_hoja_de_vida():
 
     if encontrados:
         for e in encontrados:
-            print(json.dumps(e, indent=4))
+            print(json.dumps(e, indent=4, ensure_ascii=False))
     else:
-        print("No se encontraron resultados.")
+        print("❌ No se encontraron resultados.")
 
-# Función para actualizar una hoja de vida
 def actualizar_hoja_de_vida():
     datos = cargar_datos()
-    documento = input("Ingrese el documento de la persona a actualizar: ")
+    documento = input_documento("Ingrese el documento de la persona a actualizar: ")
 
     for d in datos:
         if d["documento"] == documento:
             print("Datos actuales:")
-            print(json.dumps(d, indent=4))
-            d["contacto"] = input("Nuevo contacto: ")
-            d["direccion"] = input("Nueva dirección: ")
-            d["correo"] = input("Nuevo correo: ")
+            print(json.dumps(d, indent=4, ensure_ascii=False))
+            d["contacto"] = input_telefono("Nuevo contacto: ")
+            d["direccion"] = input_no_vacio("Nueva dirección: ")
+            d["correo"] = input_correo("Nuevo correo: ")
             guardar_datos(datos)
-            print("Información actualizada correctamente.")
+            print("✅ Información actualizada correctamente.")
             return
 
-    print("No se encontró hoja de vida con ese documento.")
+    print("❌ No se encontró hoja de vida con ese documento.")

@@ -3,7 +3,6 @@
 import json
 import os
 import csv
-from collections import Counter
 from tabulate import tabulate
 
 RUTA = "datos.json"
@@ -11,34 +10,54 @@ RUTA = "datos.json"
 def cargar_datos():
     if not os.path.exists(RUTA):
         return []
-    with open(RUTA, "r") as f:
-        return json.load(f)
+    try:
+        with open(RUTA, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        print("⚠️ Error al leer el archivo de datos. Verifica el formato JSON.")
+        return []
 
-# Genera un reporte en consola con tabulate
+# Genera un reporte en consola usando tabulate
 def generar_reporte():
     datos = cargar_datos()
     if not datos:
-        print("No hay datos para generar reporte.")
+        print("⚠️ No hay datos disponibles para generar reporte.")
         return
 
-    print("\n--- Reporte de Candidatos con más de 2 experiencias ---")
+    print("\n📊 --- Reporte: Candidatos con más de 2 experiencias ---")
     reporte = []
     for d in datos:
-        if len(d["experiencia"]) > 2:
-            reporte.append([d["nombre"], d["documento"], len(d["experiencia"]), ", ".join(d["habilidades"])])
+        if isinstance(d.get("experiencia"), list) and len(d["experiencia"]) > 2:
+            nombre = d.get("nombre", "Desconocido")
+            doc = d.get("documento", "N/D")
+            exp_count = len(d["experiencia"])
+            habilidades = ", ".join(d.get("habilidades", []))
+            reporte.append([nombre, doc, exp_count, habilidades])
 
     if reporte:
-        print(tabulate(reporte, headers=["Nombre", "Documento", "Experiencias", "Habilidades"]))
+        print(tabulate(reporte, headers=["Nombre", "Documento", "Experiencias", "Habilidades"], tablefmt="grid"))
     else:
-        print("Ningún candidato cumple el criterio.")
+        print("ℹ️ Ningún candidato cumple con más de 2 experiencias.")
 
-# Exporta los datos a CSV
+# Exporta los datos a un archivo CSV
 def exportar_datos():
     datos = cargar_datos()
-    with open("exportado.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["Nombre", "Documento", "Correo", "Experiencia"])
-        for d in datos:
-            experiencia = ", ".join([e["duracion"] for e in d["experiencia"]])
-            writer.writerow([d["nombre"], d["documento"], d["correo"], experiencia])
-    print("Datos exportados a exportado.csv correctamente.")
+    if not datos:
+        print("⚠️ No hay datos para exportar.")
+        return
+
+    try:
+        with open("exportado.csv", "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Nombre", "Documento", "Correo", "Cantidad Experiencias", "Habilidades"])
+
+            for d in datos:
+                nombre = d.get("nombre", "N/A")
+                documento = d.get("documento", "N/A")
+                correo = d.get("correo", "N/A")
+                experiencia = len(d.get("experiencia", []))
+                habilidades = ", ".join(d.get("habilidades", []))
+                writer.writerow([nombre, documento, correo, experiencia, habilidades])
+        print("✅ Datos exportados correctamente a 'exportado.csv'.")
+    except Exception as e:
+        print(f"❌ Error al exportar datos: {e}")

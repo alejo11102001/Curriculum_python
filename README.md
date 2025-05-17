@@ -1,6 +1,5 @@
 # VitaeConsole
 
-
 ## Integrantes del Equipo
 
     - Jerónimo Cardona Restrepo  

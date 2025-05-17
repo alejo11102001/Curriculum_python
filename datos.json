@@ -1,44 +1,36 @@
 [
     {
-        "nombre": "tomas loaiza",
-        "documento": "1006509403",
-        "contacto": "3456789",
-        "direccion": "calle 2",
-        "correo": "diego.com",
-        "fecha_nacimiento": "2000-12-12",
+        "nombre": "diego",
+        "documento": "1000",
+        "contacto": "322",
+        "direccion": "calle 45",
+        "correo": "zuluaga@gmail.com",
+        "fecha_nacimiento": "2001-10-11",
         "formacion": [
             {
-                "institucion": "riwi",
-                "titulo": "couder",
-                "a\u00f1os": "1"
+                "institucion": "luis amigo",
+                "titulo": "ingeniero de sistemas",
+                "a\u00f1os": "5"
             }
         ],
         "experiencia": [
             {
-                "empresa": "d1",
-                "cargo": "vendedor",
-                "funciones": "vender",
-                "duracion": "7"
-            },
-            {
-                "empresa": "sistecredito",
-                "cargo": "desarrollador",
-                "funciones": "fronted",
-                "duracion": "5 meses"
+                "empresa": "bancolombia",
+                "cargo": "practicante",
+                "funciones": "qa",
+                "duracion": "6 meses"
             }
         ],
         "referencias": [
             {
-                "nombre": "jeronimo",
-                "relacion": "amigoa",
-                "telefono": "324578"
+                "nombre": "tomas",
+                "relacion": "amigo",
+                "telefono": "320555"
             }
         ],
         "habilidades": [
-            "javascript",
-            "c",
-            "c++",
-            "c#"
+            "php",
+            "python"
         ]
     }
 ]

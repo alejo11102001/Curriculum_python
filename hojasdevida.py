@@ -1,26 +1,17 @@
 import json
 import os
-import datetime
+from datetime import datetime
+from tabulate import tabulate
+
 RUTA = "datos.json"
 
-# Lista de códigos de colores ANSI para arcoíris
-RAINBOW_COLORS = [
-    "\033[91m",  # Rojo
-    "\033[93m",  # Amarillo
-    "\033[92m",  # Verde
-    "\033[96m",  # Cyan claro
-    "\033[94m",  # Azul
-    "\033[95m"   # Magenta
-]
-
+RAINBOW_COLORS = ["\033[91m", "\033[93m", "\033[92m", "\033[96m", "\033[94m", "\033[95m"]
 RESET_COLOR = "\033[0m"
 
 def print_rainbow(text):
     colored_text = ""
-    color_count = len(RAINBOW_COLORS)
     for i, char in enumerate(text):
-        color = RAINBOW_COLORS[i % color_count]
-        colored_text += f"{color}{char}"
+        colored_text += RAINBOW_COLORS[i % len(RAINBOW_COLORS)] + char
     colored_text += RESET_COLOR
     print(colored_text)
 
@@ -39,35 +30,20 @@ def registrar_hoja_de_vida():
     nueva = {}
 
     print("\n--- Registro de Hoja de Vida ---")
+    campos = [
+        ("nombre", "Nombre completo"),
+        ("documento", "Documento"),
+        ("contacto", "Número de contacto"),
+        ("direccion", "Dirección")
+    ]
 
-    # Validar que no quede vacío
-    while True:
-        nombre = input("Nombre completo: ").strip()
-        if nombre:
-            nueva["nombre"] = nombre
-            break
-        print_rainbow("El nombre no puede estar vacío. Intente nuevamente.")
-
-    while True:
-        documento = input("Documento: ").strip()
-        if documento:
-            nueva["documento"] = documento
-            break
-        print_rainbow("El documento no puede estar vacío. Intente nuevamente.")
-
-    while True:
-        contacto = input("Número de contacto: ").strip()
-        if contacto:
-            nueva["contacto"] = contacto
-            break
-        print_rainbow("El contacto no puede estar vacío. Intente nuevamente.")
-
-    while True:
-        direccion = input("Dirección: ").strip()
-        if direccion:
-            nueva["direccion"] = direccion
-            break
-        print_rainbow("La dirección no puede estar vacía. Intente nuevamente.")
+    for key, mensaje in campos:
+        while True:
+            valor = input(f"{mensaje}: ").strip()
+            if valor:
+                nueva[key] = valor
+                break
+            print_rainbow(f"{mensaje} no puede estar vacío.")
 
     while True:
         correo = input("Correo electrónico: ").strip()
@@ -93,14 +69,13 @@ def registrar_hoja_de_vida():
         años = input("  Años: ").strip()
 
         if institucion and titulo and años.isdigit():
-            formacion = {
+            nueva["formacion"].append({
                 "institucion": institucion,
                 "titulo": titulo,
                 "años": años
-            }
-            nueva["formacion"].append(formacion)
+            })
         else:
-            print_rainbow("Datos inválidos en formación académica, inténtelo de nuevo.")
+            print_rainbow("Datos inválidos en formación académica.")
             continue
 
         if input("¿Agregar otra formación? (s/n): ").lower() != "s":
@@ -115,15 +90,14 @@ def registrar_hoja_de_vida():
         duracion = input("  Duración: ").strip()
 
         if empresa and cargo and funciones and duracion:
-            exp = {
+            nueva["experiencia"].append({
                 "empresa": empresa,
                 "cargo": cargo,
                 "funciones": funciones,
                 "duracion": duracion
-            }
-            nueva["experiencia"].append(exp)
+            })
         else:
-            print_rainbow("Datos inválidos en experiencia profesional, inténtelo de nuevo.")
+            print_rainbow("Datos inválidos en experiencia profesional.")
             continue
 
         if input("¿Agregar otra experiencia? (s/n): ").lower() != "s":
@@ -137,14 +111,13 @@ def registrar_hoja_de_vida():
         telefono = input("  Teléfono: ").strip()
 
         if nombre_ref and relacion and telefono:
-            ref = {
+            nueva["referencias"].append({
                 "nombre": nombre_ref,
                 "relacion": relacion,
                 "telefono": telefono
-            }
-            nueva["referencias"].append(ref)
+            })
         else:
-            print_rainbow("Datos inválidos en referencia, inténtelo de nuevo.")
+            print_rainbow("Datos inválidos en referencia.")
             continue
 
         if input("¿Agregar otra referencia? (s/n): ").lower() != "s":
@@ -157,24 +130,22 @@ def registrar_hoja_de_vida():
     guardar_datos(datos)
     print_rainbow("Hoja de vida registrada correctamente.")
 
-# Función para buscar una hoja de vida
 def buscar_hoja_de_vida():
     datos = cargar_datos()
-    
+
     print("\n¿Buscar por qué criterio?")
-    print("1. Nombre")
-    print("2. Documento")
-    print("3. Correo")
-    print("4. Años de experiencia")
-    print("5. Formación")
-    print("6. Habilidades")
+    print("1. Nombre\n2. Documento\n3. Correo\n4. experiencia laboral (solo numero)\n5. Formación\n6. Habilidades")
 
     opcion = input("Seleccione una opción (1-6): ")
     criterio = input("Ingrese el valor de búsqueda: ").lower()
     encontrados = []
 
     for d in datos:
-        if criterio in d["nombre"].lower() or criterio in d["documento"] or criterio in d["correo"].lower():
+        if opcion == "1" and criterio in d["nombre"].lower():
+            encontrados.append(d)
+        elif opcion == "2" and criterio in d["documento"]:
+            encontrados.append(d)
+        elif opcion == "3" and criterio in d["correo"].lower():
             encontrados.append(d)
         elif opcion == "4":
             for exp in d.get("experiencia", []):
@@ -194,7 +165,7 @@ def buscar_hoja_de_vida():
 
     if encontrados:
         for e in encontrados:
-            print(json.dumps(e, indent=4))
+            print(tabulate([[k, json.dumps(v, ensure_ascii=False)] for k, v in e.items()], headers=["Campo", "Valor"]))
     else:
         print_rainbow("No se encontraron resultados.")
 
@@ -205,10 +176,99 @@ def actualizar_hoja_de_vida():
     for d in datos:
         if d["documento"] == documento:
             print("Datos actuales:")
-            print(json.dumps(d, indent=4))
-            d["contacto"] = input("Nuevo contacto: ")
-            d["direccion"] = input("Nueva dirección: ")
-            d["correo"] = input("Nuevo correo: ")
+            tabla = [[k, json.dumps(v, ensure_ascii=False)] for k, v in d.items()]
+            print(tabulate(tabla, headers=["Campo", "Valor"], tablefmt="grid"))
+
+            # Actualizar contacto, dirección y correo
+            contacto = input("Nuevo contacto (Enter para mantener actual): ").strip()
+            if contacto:
+                d["contacto"] = contacto
+
+            direccion = input("Nueva dirección (Enter para mantener actual): ").strip()
+            if direccion:
+                d["direccion"] = direccion
+
+            correo = input("Nuevo correo (Enter para mantener actual): ").strip()
+            if correo:
+                d["correo"] = correo
+
+            # Agregar nuevas experiencias
+            while True:
+                agregar_exp = input("¿Desea agregar experiencia profesional? (s/n): ").lower()
+                if agregar_exp == "s":
+                    empresa = input("  Empresa: ").strip()
+                    cargo = input("  Cargo: ").strip()
+                    funciones = input("  Funciones: ").strip()
+                    duracion = input("  Duración: ").strip()
+
+                    if empresa and cargo and funciones and duracion:
+                        exp = {
+                            "empresa": empresa,
+                            "cargo": cargo,
+                            "funciones": funciones,
+                            "duracion": duracion
+                        }
+                        d.setdefault("experiencia", []).append(exp)
+                        print_rainbow("Experiencia agregada.")
+                    else:
+                        print_rainbow("Datos inválidos en experiencia, inténtelo de nuevo.")
+                elif agregar_exp == "n":
+                    break
+                else:
+                    print_rainbow("Opción no válida. Por favor ingrese 's' o 'n'.")
+
+            # Agregar nuevas formaciones
+            while True:
+                agregar_form = input("¿Desea agregar formación académica? (s/n): ").lower()
+                if agregar_form == "s":
+                    institucion = input("  Institución: ").strip()
+                    titulo = input("  Título: ").strip()
+                    años = input("  Años: ").strip()
+
+                    if institucion and titulo and años.isdigit():
+                        formacion = {
+                            "institucion": institucion,
+                            "titulo": titulo,
+                            "años": años
+                        }
+                        d.setdefault("formacion", []).append(formacion)
+                        print_rainbow("Formación agregada.")
+                    else:
+                        print_rainbow("Datos inválidos en formación académica, inténtelo de nuevo.")
+                elif agregar_form == "n":
+                    break
+                else:
+                    print_rainbow("Opción no válida. Por favor ingrese 's' o 'n'.")
+
+            # Actualizar habilidades
+            habilidades = input("Ingrese habilidades separadas por coma (Enter para mantener actuales): ").strip()
+            if habilidades:
+                d["habilidades"] = [h.strip() for h in habilidades.split(",") if h.strip()]
+                print_rainbow("Habilidades actualizadas.")
+
+            # Agregar nuevas referencias
+            while True:
+                agregar_ref = input("¿Desea agregar una referencia? (s/n): ").lower()
+                if agregar_ref == "s":
+                    nombre_ref = input("  Nombre: ").strip()
+                    relacion = input("  Relación: ").strip()
+                    telefono = input("  Teléfono: ").strip()
+
+                    if nombre_ref and relacion and telefono:
+                        ref = {
+                            "nombre": nombre_ref,
+                            "relacion": relacion,
+                            "telefono": telefono
+                        }
+                        d.setdefault("referencias", []).append(ref)
+                        print_rainbow("Referencia agregada.")
+                    else:
+                        print_rainbow("Datos inválidos en referencia, inténtelo de nuevo.")
+                elif agregar_ref == "n":
+                    break
+                else:
+                    print_rainbow("Opción no válida. Por favor ingrese 's' o 'n'.")
+
             guardar_datos(datos)
             print_rainbow("Información actualizada correctamente.")
             return

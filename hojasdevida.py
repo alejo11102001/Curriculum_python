@@ -1,82 +1,163 @@
-# Módulo de gestión de hojas de vida
-
 import json
 import os
-
+import datetime
 RUTA = "datos.json"
 
-# Función para cargar los datos desde el archivo JSON
+# Lista de códigos de colores ANSI para arcoíris
+RAINBOW_COLORS = [
+    "\033[91m",  # Rojo
+    "\033[93m",  # Amarillo
+    "\033[92m",  # Verde
+    "\033[96m",  # Cyan claro
+    "\033[94m",  # Azul
+    "\033[95m"   # Magenta
+]
+
+RESET_COLOR = "\033[0m"
+
+def print_rainbow(text):
+    colored_text = ""
+    color_count = len(RAINBOW_COLORS)
+    for i, char in enumerate(text):
+        color = RAINBOW_COLORS[i % color_count]
+        colored_text += f"{color}{char}"
+    colored_text += RESET_COLOR
+    print(colored_text)
+
 def cargar_datos():
     if not os.path.exists(RUTA):
         return []
     with open(RUTA, "r") as f:
         return json.load(f)
 
-# Función para guardar los datos al archivo JSON
 def guardar_datos(datos):
     with open(RUTA, "w") as f:
         json.dump(datos, f, indent=4)
 
-# Función para registrar una nueva hoja de vida
 def registrar_hoja_de_vida():
     datos = cargar_datos()
     nueva = {}
 
     print("\n--- Registro de Hoja de Vida ---")
-    nueva["nombre"] = input("Nombre completo: ")
-    nueva["documento"] = input("Documento: ")
-    nueva["contacto"] = input("Número de contacto: ")
-    nueva["direccion"] = input("Dirección: ")
-    nueva["correo"] = input("Correo electrónico: ")
-    nueva["fecha_nacimiento"] = input("Fecha de nacimiento (AAAA-MM-DD): ")
+
+    # Validar que no quede vacío
+    while True:
+        nombre = input("Nombre completo: ").strip()
+        if nombre:
+            nueva["nombre"] = nombre
+            break
+        print_rainbow("El nombre no puede estar vacío. Intente nuevamente.")
+
+    while True:
+        documento = input("Documento: ").strip()
+        if documento:
+            nueva["documento"] = documento
+            break
+        print_rainbow("El documento no puede estar vacío. Intente nuevamente.")
+
+    while True:
+        contacto = input("Número de contacto: ").strip()
+        if contacto:
+            nueva["contacto"] = contacto
+            break
+        print_rainbow("El contacto no puede estar vacío. Intente nuevamente.")
+
+    while True:
+        direccion = input("Dirección: ").strip()
+        if direccion:
+            nueva["direccion"] = direccion
+            break
+        print_rainbow("La dirección no puede estar vacía. Intente nuevamente.")
+
+    while True:
+        correo = input("Correo electrónico: ").strip()
+        if correo and "@" in correo and "." in correo:
+            nueva["correo"] = correo
+            break
+        print_rainbow("Correo inválido. Intente nuevamente.")
+
+    while True:
+        fecha = input("Fecha de nacimiento (AAAA-MM-DD): ").strip()
+        try:
+            datetime.strptime(fecha, "%Y-%m-%d")
+            nueva["fecha_nacimiento"] = fecha
+            break
+        except ValueError:
+            print_rainbow("Formato de fecha incorrecto. Use AAAA-MM-DD.")
 
     nueva["formacion"] = []
     while True:
         print("Agregar formación académica:")
-        formacion = {
-            "institucion": input("  Institución: "),
-            "titulo": input("  Título: "),
-            "años": input("  Años: ")
-        }
-        nueva["formacion"].append(formacion)
+        institucion = input("  Institución: ").strip()
+        titulo = input("  Título: ").strip()
+        años = input("  Años: ").strip()
+
+        if institucion and titulo and años.isdigit():
+            formacion = {
+                "institucion": institucion,
+                "titulo": titulo,
+                "años": años
+            }
+            nueva["formacion"].append(formacion)
+        else:
+            print_rainbow("Datos inválidos en formación académica, inténtelo de nuevo.")
+            continue
+
         if input("¿Agregar otra formación? (s/n): ").lower() != "s":
             break
 
     nueva["experiencia"] = []
     while True:
         print("Agregar experiencia profesional:")
-        exp = {
-            "empresa": input("  Empresa: "),
-            "cargo": input("  Cargo: "),
-            "funciones": input("  Funciones: "),
-            "duracion": input("  Duración: ")
-        }
-        nueva["experiencia"].append(exp)
+        empresa = input("  Empresa: ").strip()
+        cargo = input("  Cargo: ").strip()
+        funciones = input("  Funciones: ").strip()
+        duracion = input("  Duración: ").strip()
+
+        if empresa and cargo and funciones and duracion:
+            exp = {
+                "empresa": empresa,
+                "cargo": cargo,
+                "funciones": funciones,
+                "duracion": duracion
+            }
+            nueva["experiencia"].append(exp)
+        else:
+            print_rainbow("Datos inválidos en experiencia profesional, inténtelo de nuevo.")
+            continue
+
         if input("¿Agregar otra experiencia? (s/n): ").lower() != "s":
             break
 
     nueva["referencias"] = []
     while True:
         print("Agregar referencia:")
-        ref = {
-            "nombre": input("  Nombre: "),
-            "relacion": input("  Relación: "),
-            "telefono": input("  Teléfono: ")
-        }
-        nueva["referencias"].append(ref)
+        nombre_ref = input("  Nombre: ").strip()
+        relacion = input("  Relación: ").strip()
+        telefono = input("  Teléfono: ").strip()
+
+        if nombre_ref and relacion and telefono:
+            ref = {
+                "nombre": nombre_ref,
+                "relacion": relacion,
+                "telefono": telefono
+            }
+            nueva["referencias"].append(ref)
+        else:
+            print_rainbow("Datos inválidos en referencia, inténtelo de nuevo.")
+            continue
+
         if input("¿Agregar otra referencia? (s/n): ").lower() != "s":
             break
 
-    habilidades = input("Ingrese habilidades separadas por coma: ")
-    nueva["habilidades"] = [h.strip() for h in habilidades.split(",")]
+    habilidades = input("Ingrese habilidades separadas por coma: ").strip()
+    nueva["habilidades"] = [h.strip() for h in habilidades.split(",") if h.strip()]
 
     datos.append(nueva)
     guardar_datos(datos)
-    print("Hoja de vida registrada correctamente.")
+    print_rainbow("Hoja de vida registrada correctamente.")
 
-from tabulate import tabulate
-import json
-
+# Función para buscar una hoja de vida
 def buscar_hoja_de_vida():
     datos = cargar_datos()
     
@@ -93,11 +174,7 @@ def buscar_hoja_de_vida():
     encontrados = []
 
     for d in datos:
-        if opcion == "1" and criterio in d["nombre"].lower():
-            encontrados.append(d)
-        elif opcion == "2" and criterio in d["documento"]:
-            encontrados.append(d)
-        elif opcion == "3" and criterio in d["correo"].lower():
+        if criterio in d["nombre"].lower() or criterio in d["documento"] or criterio in d["correo"].lower():
             encontrados.append(d)
         elif opcion == "4":
             for exp in d.get("experiencia", []):
@@ -117,130 +194,23 @@ def buscar_hoja_de_vida():
 
     if encontrados:
         for e in encontrados:
-            print("\n==============================")
-            print(f" Hoja de vida de: {e['nombre']}")
-            print("==============================")
-
-            # Datos personales
-            personales = [[
-                e.get("nombre", ""),
-                e.get("documento", ""),
-                e.get("contacto", ""),
-                e.get("direccion", ""),
-                e.get("correo", ""),
-                e.get("fecha_nacimiento", "")
-            ]]
-            print("\n Datos Personales:")
-            print(tabulate(personales, headers=["Nombre", "Documento", "Contacto", "Dirección", "Correo", "Fecha Nac."]))
-
-            # Formación
-            formacion = []
-            for f in e.get("formacion", []):
-                formacion.append([f.get("institucion", ""), f.get("titulo", ""), f.get("años", "")])
-            print("\n Formación:")
-            print(tabulate(formacion, headers=["Institución", "Título", "Años"]))
-
-            # Experiencia
-            experiencia = []
-            for ex in e.get("experiencia", []):
-                experiencia.append([ex.get("empresa", ""), ex.get("cargo", ""), ex.get("funciones", ""), ex.get("duracion", "")])
-            print("\n Experiencia:")
-            print(tabulate(experiencia, headers=["Empresa", "Cargo", "Funciones", "Duración"]))
-
-            # Referencias
-            referencias = []
-            for r in e.get("referencias", []):
-                referencias.append([r.get("nombre", ""), r.get("relacion", ""), r.get("telefono", "")])
-            print("\n Referencias:")
-            print(tabulate(referencias, headers=["Nombre", "Relación", "Teléfono"]))
-
-            # Habilidades
-            habilidades = [[", ".join(e.get("habilidades", []))]]
-            print("\n Habilidades:")
-            print(tabulate(habilidades, headers=["Habilidades"]))
+            print(json.dumps(e, indent=4))
     else:
-        print("No se encontraron resultados.")
+        print_rainbow("No se encontraron resultados.")
 
 def actualizar_hoja_de_vida():
     datos = cargar_datos()
-    documento = input("Ingrese el documento de la persona a actualizar: ")
+    documento = input("Ingrese el documento de la persona a actualizar: ").strip()
 
     for d in datos:
         if d["documento"] == documento:
             print("Datos actuales:")
-            print("\n📌 Datos personales:")
-            personales = [[
-                d.get("nombre", ""),
-                d.get("documento", ""),
-                d.get("contacto", ""),
-                d.get("direccion", ""),
-                d.get("correo", ""),
-                d.get("fecha_nacimiento", "")
-            ]]
-            print(tabulate(personales, headers=["Nombre", "Documento", "Contacto", "Dirección", "Correo", "Fecha Nac."]))
-
-            print("\n🎓 Formación:")
-            formacion = [[f["institucion"], f["titulo"], f["años"]] for f in d.get("formacion", [])]
-            print(tabulate(formacion, headers=["Institución", "Título", "Años"]))
-
-            print("\n💼 Experiencia:")
-            experiencia = [[e["empresa"], e["cargo"], e["funciones"], e["duracion"]] for e in d.get("experiencia", [])]
-            print(tabulate(experiencia, headers=["Empresa", "Cargo", "Funciones", "Duración"]))
-
-            print("\n📞 Referencias:")
-            referencias = [[r["nombre"], r["relacion"], r["telefono"]] for r in d.get("referencias", [])]
-            print(tabulate(referencias, headers=["Nombre", "Relación", "Teléfono"]))
-
-            print("\n🛠️ Habilidades:")
-            print(", ".join(d.get("habilidades", [])))
-
-            # Actualizar campos básicos
+            print(json.dumps(d, indent=4))
             d["contacto"] = input("Nuevo contacto: ")
             d["direccion"] = input("Nueva dirección: ")
             d["correo"] = input("Nuevo correo: ")
-
-            # Añadir nueva experiencia
-            if input("¿Desea agregar una nueva experiencia? (s/n): ").lower() == "s":
-                nueva_exp = {
-                    "empresa": input("Empresa: "),
-                    "cargo": input("Cargo: "),
-                    "funciones": input("Funciones: "),
-                    "duracion": input("Duración (meses o años): ")
-                }
-                d.setdefault("experiencia", []).append(nueva_exp)
-
-            # Añadir nueva formación
-            if input("¿Desea agregar una nueva formación? (s/n): ").lower() == "s":
-                nueva_form = {
-                    "institucion": input("Institución: "),
-                    "titulo": input("Título obtenido: "),
-                    "años": input("Años de formación: ")
-                }
-                d.setdefault("formacion", []).append(nueva_form)
-
-            # Cambiar o agregar habilidades
-            if input("¿Desea modificar las habilidades? (s/n): ").lower() == "s":
-                habilidades = input("Ingrese las habilidades separadas por coma: ")
-                d["habilidades"] = [h.strip() for h in habilidades.split(",")]
-
-            # Cambiar o agregar referencias
-            if input("¿Desea modificar las referencias? (s/n): ").lower() == "s":
-                nuevas_ref = []
-                while True:
-                    nombre = input("Nombre de referencia: ")
-                    relacion = input("Relación: ")
-                    telefono = input("Teléfono: ")
-                    nuevas_ref.append({
-                        "nombre": nombre,
-                        "relacion": relacion,
-                        "telefono": telefono
-                    })
-                    if input("¿Agregar otra referencia? (s/n): ").lower() != "s":
-                        break
-                d["referencias"] = nuevas_ref
-
             guardar_datos(datos)
-            print("Información actualizada correctamente.")
+            print_rainbow("Información actualizada correctamente.")
             return
 
-    print("No se encontró hoja de vida con ese documento.")
+    print_rainbow("No se encontró hoja de vida con ese documento.")

@@ -1,4 +1,6 @@
+# Archivo principal del sistema VitaeConsole
 
+# Importamos los módulos necesarios
 from hojasdevida import registrar_hoja_de_vida, buscar_hoja_de_vida, actualizar_hoja_de_vida
 from reportes import generar_reporte, exportar_datos, reporte_por_formacion
 

@@ -19,12 +19,14 @@
 
 ## Instrucciones para Ejecutar el Programa
 
-    1. Clona o descarga el repositorio a tu máquina local.
-    2. Asegúrate de tener Python 3.7 o superior instalado.
-    3. Instala la librería necesaria con el siguiente comando:
-    ```bash
-    
-    pip install tabulate
+1. Clona o descarga este repositorio en tu máquina local.
+2. Asegúrate de tener instalado Python 3.7 o superior.
+3. Abre una terminal en el directorio del proyecto.
+4. Instala la dependencia con el siguiente comando:
+
+```bash
+
+pip install tabulate
 
 python main.py
 
